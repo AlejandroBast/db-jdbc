@@ -15,7 +15,6 @@ public class StudentDAO {
                 INSERT INTO students (name, lastname, email, career_id)
                 VALUES (?, ?, ?, ?)
                 """;
-
         try (Connection conex = DatabaseConnection.getConnection();
              PreparedStatement prepareQuery = conex.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -36,7 +35,6 @@ public class StudentDAO {
                 }
             }
         }
-
         return student;
     }
 
@@ -72,7 +70,44 @@ public class StudentDAO {
                 students.add(student);
             }
         }
-
         return students;
+    }
+
+    public void detele(int id) throws SQLException{
+        String sql="DELETE FROM students WHERE id = ?";
+
+        try (Connection conex = DatabaseConnection.getConnection();
+            PreparedStatement statement = conex.prepareStatement(sql)){
+
+            statement.setInt(1, id);
+            int filas = statement.executeUpdate();
+
+            if (filas == 0){
+                throw new SQLException("No se encontro el estudiante con id: "+ id);
+            }
+
+            System.out.println("estudiante eliminado correctamente.");
+        }
+    }
+
+    public void edit(Student student) throws SQLException{
+        String sql = """
+                UPDATE students
+                SET name = ?, lastname = ?, email = ?, career_id = ?
+                WHERE id = ?
+                """;
+        try (Connection conex = DatabaseConnection.getConnection();
+             PreparedStatement statement = conex.prepareStatement(sql)){
+
+            statement.setString(1, student.getName());
+            statement.setString(2, student.getLastname());
+            statement.setString(3, student.getEmail());
+            statement.setInt(4, student.getCareerId());
+            statement.setInt(5, student.getId());
+
+            statement.executeUpdate();
+
+            System.out.println("Estudiante actualizado correctamente.");
+        }
     }
 }

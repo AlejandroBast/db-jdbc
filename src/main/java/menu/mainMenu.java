@@ -21,6 +21,7 @@ public class mainMenu {
             System.out.println("\n===== MENU ESTUDIANTES =====");
             System.out.println("1. Insertar estudiante");
             System.out.println("2. Listar estudiantes");
+            System.out.println("3. Eliminar estudiante");
             System.out.println("0. Salir");
             System.out.print("Seleccione una opción: ");
 
@@ -31,6 +32,9 @@ public class mainMenu {
 
                 case 1 -> insertStudent();
                 case 2 -> listStudents();
+                case 3 -> deleteStudent();
+                case 4 -> editStudent();
+
                 case 0 -> System.out.println("Saliendo del sistema...");
                 default -> System.out.println("Opción inválida");
 
@@ -95,4 +99,44 @@ public class mainMenu {
 
     }
 
+    private void deleteStudent(){
+        try {
+
+            System.out.println("Ingrese el id del estudiante a eliminar: ");
+            int idEliminar = scanner.nextInt();
+            studentDAO.detele(idEliminar);
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void editStudent(){
+
+        try{
+
+            Student student = new Student();
+
+            System.out.print("Nombre: ");
+            student.setName(scanner.nextLine());
+
+            System.out.print("Apellido: ");
+            student.setLastname(scanner.nextLine());
+
+            System.out.print("Email: ");
+            student.setEmail(scanner.nextLine());
+
+            System.out.print("ID de carrera: ");
+            student.setCareerId(scanner.nextInt());
+            scanner.nextLine();
+
+            studentDAO.insert(student);
+
+            System.out.println("Estudiante insertado con ID: " + student.getId());
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+    }
 }
